@@ -131,6 +131,7 @@
                 const code = event.data.detail.code;
                 localStorage.setItem('code', code);
                 document.querySelector('dialog').close();
+                document.querySelector('dialog').remove();
                 window.dispatchEvent(new HashChangeEvent("hashchange"));
             }
         });
