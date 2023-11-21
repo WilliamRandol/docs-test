@@ -155,11 +155,13 @@
             const button = document.createElement('button');
             button.innerHTML = 'Authenticate';
             button.addEventListener('click', () => {
-                window.open(authUrl, 'auth', 'width=500,height=500');
-                window.onbeforeunload = () => {
-                    authDialog.close();
-                    authDialog.remove();
-                    window.dispatchEvent(new HashChangeEvent("hashchange"));
+                const child = window.open(authUrl, 'auth', 'width=500,height=500');
+                child.onunload = () => {
+                    if(child.closed) {
+                        authDialog.close();
+                        authDialog.remove();
+                        window.dispatchEvent(new HashChangeEvent("hashchange"));
+                    }
                 }
             });
             authDialog.innerHTML = //html
