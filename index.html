@@ -61,7 +61,7 @@
                         files: folderFiles
                     })
                 }
-                return sortedFiles;
+                return sortedFiles.filter(file => file.path || file.files?.length);
             }
 
             async function init() {
