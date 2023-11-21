@@ -134,6 +134,8 @@
         async function _makeGitHubApiRequest(url, options) {
             const token = localStorage.getItem('token');
             const authenticatedOptions = token ? {
+                includeCredentials: true,
+                mode: 'cors',
                 headers: {
                     "Authorization": `Bearer ${token}`,
                 }
