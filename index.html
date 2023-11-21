@@ -38,8 +38,10 @@
         integrity="sha512-30lMQ13MJJk66BfdlnvVnKmP05V7Qt1g6sHyYigDgV8i9M2ENAsXk1U4dVvKUYB6pqb2bVhoxhZsYK08hQpS+g=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <script>
-        const treeUrl = 'https://api.github.com/repos/WilliamRandol/docs-test/git/trees/main?recursive=1';
-        const fileRootUrl = 'https://raw.githubusercontent.com/WilliamRandol/docs-test/main/';
+        const baseUrl = 'https://api.github.com/repos/WilliamRandol/docs-test/';
+        const treeUrl = `${baseUrl}git/trees/main?recursive=1`;
+        const contentUrl = `${baseUrl}contents/`;
+        //const fileRootUrl = 'https://raw.githubusercontent.com/WilliamRandol/docs-test/main/';
 
         window.addEventListener('load', () => {
             const tableOfContents = document.querySelector('aside');
@@ -109,14 +111,14 @@
             if(hash.endsWith('/')) {
                 hash += 'README';
             }
-            const hydratedUrl = `${fileRootUrl}${hash}.md`;
+            const hydratedUrl = `${contentUrl}${hash}.md`;
             _makeGitHubApiRequest(hydratedUrl)
-                .then(r => r.text())
+                .then(r => r.json())
                 .then(async r => {
                     _makeGitHubApiRequest('https://api.github.com/markdown', {
                         method: 'POST',
                         body: JSON.stringify({
-                            text: r,
+                            text: r.content,
                             mode: 'gfm',
                             context: 'WilliamRandol/docs-test'
                         })
