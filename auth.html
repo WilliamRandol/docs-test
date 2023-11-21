@@ -9,8 +9,8 @@
     fetch(`https://test-docs-auth.williamrandol.workers.dev/?code=${code}`)
       .then(res => res.json())
       .then(data => {
-        console.log(data);
         localStorage.setItem('token', data.access_token);
+        window.close();
       })
       .catch(err => console.error(err));
   </script>
