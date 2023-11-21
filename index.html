@@ -70,7 +70,6 @@
 
                 function fillTableOfContent(files, parent) {
                     const menu = document.createElement('menu');
-                    console.log(files);
                     files.forEach(file => {
                         const menuItem = document.createElement('li');
                         if (file.files) {
@@ -104,7 +103,6 @@
 
         window.addEventListener('hashchange', () => {
             let hash = decodeURIComponent(window.location.hash.replace('#', ''));
-            console.log(hash);
             if(hash == '') {
                 hash = 'README';
             }
@@ -138,10 +136,8 @@
                 ...authenticatedOptions,
                 ...options
             }
-            console.log(options);
             const r = await fetch(url, options)
             
-            console.log(r);
             if (r.status == 403) {
                 _has403Error(r);
             }
