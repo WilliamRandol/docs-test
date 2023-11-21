@@ -98,7 +98,7 @@
                     parent.appendChild(menu);
                 }
 
-                window.dispatchEvent(new HashChangeEvent("hashchange"))
+                window.dispatchEvent(new HashChangeEvent("hashchange"));
             }
         });
 
@@ -130,6 +130,8 @@
             if (event.data.type == 'authenticated') {
                 const code = event.data.detail.code;
                 localStorage.setItem('code', code);
+                document.querySelector('dialog').close();
+                window.dispatchEvent(new HashChangeEvent("hashchange"));
             }
         });
 
