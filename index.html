@@ -126,16 +126,6 @@
                 })
         });
 
-        window.addEventListener('message', (event) => {
-            if (event.data.type == 'authenticated') {
-                const code = event.data.detail.code;
-                localStorage.setItem('code', code);
-                document.querySelector('dialog').close();
-                document.querySelector('dialog').remove();
-                window.dispatchEvent(new HashChangeEvent("hashchange"));
-            }
-        });
-
         async function _makeGitHubApiRequest(url, options) {
             const token = localStorage.getItem('token');
             const authenticatedOptions = token ? {
@@ -166,6 +156,10 @@
             button.innerHTML = 'Authenticate';
             button.addEventListener('click', () => {
                 window.open(authUrl, 'auth', 'width=500,height=500');
+                window.onbeforeunload = () => {
+                    authDialog.close();
+                    authDialog.remove();
+                }
             });
             authDialog.innerHTML = //html
             `
