@@ -135,7 +135,9 @@
             const token = localStorage.getItem('token');
             const authenticatedOptions = token ? {
                 headers: {
-                    "Authentication": `Bearer ${token}`
+                    "Authentication": `Bearer ${token}`,
+                    "access-control-request-headers": "*",
+                    "access-control-request-method": "GET, POST, PUT, PATCH, OPTIONS, DELETE",
                 }
             } : {};
             options = {
