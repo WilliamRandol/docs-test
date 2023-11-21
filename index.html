@@ -135,7 +135,7 @@
             const token = localStorage.getItem('token');
             const authenticatedOptions = token ? {
                 headers: {
-                    "Authentication": `Bearer ${token}`
+                    //"Authentication": `Bearer ${token}`
                 }
             } : {};
             options = {
