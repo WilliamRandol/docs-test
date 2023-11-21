@@ -159,6 +159,7 @@
                 window.onbeforeunload = () => {
                     authDialog.close();
                     authDialog.remove();
+                    window.dispatchEvent(new HashChangeEvent("hashchange"));
                 }
             });
             authDialog.innerHTML = //html
