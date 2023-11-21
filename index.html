@@ -135,7 +135,6 @@
             const token = localStorage.getItem('token');
             const authenticatedOptions = token ? {
                 includeCredentials: true,
-                mode: `${url.match('raw.githubusercontent.com') ? 'no-' : ''}cors`,
                 headers: {
                     "Authorization": `Bearer ${token}`,
                 }
