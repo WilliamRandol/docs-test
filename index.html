@@ -47,7 +47,7 @@
             init();
 
             async function getAllFiles() {
-                const response = await fetch(treeUrl);
+                const response = await _makeGitHubApiRequest(treeUrl);
                 const data = await response.json();
                 const files = data.tree.filter(file => file.type == 'blob' && file.path.endsWith('.md'));
                 const folders = data.tree.filter(file => file.type == 'tree');
@@ -95,10 +95,10 @@
                     })
                     parent.appendChild(menu);
                 }
-                
+
                 window.dispatchEvent(new HashChangeEvent("hashchange"))
             }
-        })
+        });
 
         window.addEventListener('hashchange', () => {
             let hash = decodeURIComponent(window.location.hash.replace('#', ''));
@@ -110,10 +110,10 @@
                 hash += 'README';
             }
             const hydratedUrl = `${fileRootUrl}${hash}.md`;
-            fetch(hydratedUrl)
+            _makeGitHubApiRequest(hydratedUrl)
                 .then(r => r.text())
                 .then(async r => {
-                    fetch('https://api.github.com/markdown', {
+                    _makeGitHubApiRequest('https://api.github.com/markdown', {
                         method: 'POST',
                         body: JSON.stringify({
                             text: r,
@@ -122,7 +122,45 @@
                         })
                     }).then(r => r.text()).then(r => document.querySelector('main').innerHTML = r);
                 })
-        })
+        });
+
+        window.addEventListener('message', (event) => {
+            if (event.data.type == 'authenticated') {
+                const code = event.data.detail.code;
+                localStorage.setItem('code', code);
+            }
+        });
+
+        async function _makeGitHubApiRequest(url, options) {
+            const token = localStorage.getItem('token');
+            options = !token ? options : {
+                ...options,
+                'Authorization': `Bearer ${token}`,
+            };
+            const r = await fetch(url, options)
+            
+            console.log(r);
+            if (r.status == 403) {
+                _has403Error(r);
+            }
+
+            return r;
+        }
+
+        function _has403Error(response) {
+            const authUrl = 'https://github.com/login/oauth/authorize?clientId=793777d3f0ea78da3600';
+            const authDialog = document.createElement('dialog');
+            authDialog.innerHTML = //html
+            `
+                <div>
+                    <h1>Authentication Required</h1>
+                    <p>We've hit GitHub's rate limit for unauthenticated users.</p>
+                </div>
+                <iframe src="${authUrl}" style="width: 100%; height: 600px; border: none;"></iframe>
+            `;
+            document.body.appendChild(authDialog);
+            authDialog.showModal();
+        }
     </script>
 
 </html>
