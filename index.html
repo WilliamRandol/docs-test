@@ -133,7 +133,7 @@
 
         async function _makeGitHubApiRequest(url, options) {
             const token = localStorage.getItem('token');
-            options = !token ? options : options ? { ...options, headers: { ...options.headers, Authorization: `token ${token}` } } : { headers: { Authorization: `token ${token}` } };
+            options = !token ? options : options ? { ...options, headers: { ...options.headers, Authorization: `Bearer ${token}` } } : { headers: { Authorization: `Bearer ${token}` } };
             const r = await fetch(url, options)
             
             console.log(r);
