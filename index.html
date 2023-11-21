@@ -148,16 +148,21 @@
         }
 
         function _has403Error(response) {
-            const authUrl = 'https://github.com/login/oauth/authorize?clientId=793777d3f0ea78da3600';
+            const authUrl = 'https://github.com/login/oauth/authorize?client_id=793777d3f0ea78da3600';
             const authDialog = document.createElement('dialog');
+            const button = document.createElement('button');
+            button.innerHTML = 'Authenticate';
+            button.addEventListener('click', () => {
+                window.open(authUrl, 'auth', 'width=500,height=500');
+            });
             authDialog.innerHTML = //html
             `
                 <div>
                     <h1>Authentication Required</h1>
                     <p>We've hit GitHub's rate limit for unauthenticated users.</p>
                 </div>
-                <iframe src="${authUrl}" style="width: 100%; height: 600px; border: none;"></iframe>
             `;
+            authDialog.appendChild(button);
             document.body.appendChild(authDialog);
             authDialog.showModal();
         }
